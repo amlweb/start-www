@@ -1,0 +1,45 @@
+.icon {
+	&--hamburger {
+		transform: rotate(0deg);
+		position: relative;
+		height: 40px;
+		width: 40px;
+
+		.line {
+			position: absolute;
+			left: 0;
+			width: 40px;
+			height: 4px;
+			background-color: $white;
+			border-radius: 2px;
+			transition: all 0.3s ease;
+
+			&:nth-child(1) {
+			  	top: 0px;
+			}
+			&:nth-child(2) {
+			  	top: 18px;
+			}
+			&:nth-child(3) {
+			  	top: 36px;
+			}
+		}
+
+		&.icon--close {
+			.line:nth-child(1) {
+			  top: 18px;
+			  transform: rotate(135deg);
+			}
+
+			.line:nth-child(2) {
+			  opacity: 0;
+			  left: 60px;
+			}
+
+			.line:nth-child(3) {
+			  top: 18px;
+			  transform: rotate(-135deg);
+			}
+		}
+	}
+}
