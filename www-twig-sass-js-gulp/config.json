@@ -1,0 +1,20 @@
+{
+  "path": {
+    "sources": "src/",
+    "results": "web/"
+  },
+  "fileType": {
+    "js": "js/",
+    "css": "css/",
+    "sass": "scss/",
+    "img": "img/",
+    "twig": "twig/",
+    "exclude": "vendors/"
+  },
+  "names": {
+    "scriptsOrigin": "main.js",
+    "scripts": "scripts.min.js",
+    "styles": "styles.min.css",
+    "twigGlobals": "_globals.json"
+  }
+}

@@ -1,0 +1,10 @@
+.btn {
+    display: inline-block;
+    outline: none;
+    text-decoration: none;
+
+    &:hover, &:active {
+        background-color: $yellow;
+
+    }
+}

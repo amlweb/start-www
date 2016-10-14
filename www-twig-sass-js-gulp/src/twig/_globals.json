@@ -1,0 +1,15 @@
+{
+  "globals": {
+    "meta": {
+      "title": "Intro Studio",
+      "description": "",
+      "favicon": "favicon.ico"
+    },
+    "sitemap": {
+      "home": "index.html",
+      "projekty": "projects.html",
+      "polityka cookies": "cookies.html",
+      "textiles": "offer.html"
+    }
+  }
+}

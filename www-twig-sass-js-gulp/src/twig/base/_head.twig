@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="keywords" content="">
+            <meta name="description" content="" />
+            <meta name="format-detection" content="telephone=no" />
+            <meta name="robots" content="index, follow">
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+            {# FAVICON #}
+            <link rel="shortcut icon" href="{{ globals.meta.favicon }}" />
+            {# generate all from https://realfavicongenerator.net/ #}
+            {# end FAVICON #}
+
+            <title>{{ globals.meta.title }}{% if subtitle %} >> {{ subtitle }}{% endif %}</title>
+
+            {# OG PROTOCOL #}
+            <meta property="og:title"              content="{{ globals.meta.title }}{% if subtitle %} >> {{ subtitle }}{% endif %}" />
+            <meta property="og:url"                content="" />
+            <meta property="og:type"               content="" />
+            <meta property="og:description"        content="" />
+            <meta property="og:image"              content="" />
+            {# end OG PROTOCOL #}
+
+            <!-- inject:css --><!-- endinject -->
+        </head>

@@ -1,0 +1,19 @@
+{% include '_head.twig' %}
+
+    <body {% if bodyclass %}class="{{ bodyclass }}"{% endif %}>
+
+        {% block header %}
+            {% include '../layout/_navigation.twig' %}
+            {% include '../layout/_header.twig' %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+        {% block footer %}
+            {% include '../layout/_footer.twig' %}
+        {% endblock %}
+
+        {% include '../base/_scripts.twig' %}
+        {% block scripts %}{% endblock %}
+    </body>
+{% include '_end.twig' %}

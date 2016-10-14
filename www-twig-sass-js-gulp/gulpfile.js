@@ -1,96 +1,178 @@
-//*********** IMPORTS *****************
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var watch = require('gulp-watch');
-var gulpIgnore = require('gulp-ignore');
-var argv = require('yargs').argv;
-var rename = require('gulp-rename');
-var plumber = require('gulp-plumber');
-//*********** SASS *****************
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-//*********** JS *****************
-var uglify = require('gulp-uglify');
-//*********** TWIG *****************
-var twig = require('gulp-twig');
+'use strict';
 
-// //Configuration - Change me
-var sassFiles = [
-    {
-        watch: 'src/scss/**/*.scss',
-        output: './web/css'
-    }
-];
+const
+    fs = require('fs'),
+    gulp = require('gulp'),
+    plugins = require('gulp-load-plugins')(),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
+    argv = require('argv'),
+    clc = require('cli-color'),
+    config = require('./config.json');
 
-var jsFiles = [
-    {
-        watch: 'src/js/**/main.js',
-        output: './web/js/'
-    }
-];
-
-var twigFiles = [
-    {
-        watch: 'src/twig/**/*.twig',
-        output: './web'
-    }
-];
-//END configuration
-
-
-gulp.task('watch', function () {
-    if(argv.build) {
-        gulp.start(['build']);
+class Tasks {
+    constructor() {
+        config.params = {};
+        process.argv.forEach(val => config.params[val.replace(/-/gi, '')] = true);
     }
 
-    gulp.watch(sassFiles[0].watch, ['sass']);
-    gulp.watch(jsFiles[0].watch, ['js']);
-    gulp.watch(twigFiles[0].watch, ['twig']);
+    compileJs() {
+        return browserify({
+            entries: config.path.sources + config.fileType.js + config.names.scriptsOrigin,
+            ignore: config.fileType.exclude,
+            debug: true
+        })
+            .transform('babelify', {
+                presets: ['es2015'],
+                ignore: config.fileType.exclude
+            })
+            .bundle()
+            .pipe(source(config.names.scriptsOrigin))
+            .pipe(buffer())
+            .pipe(plugins.sourcemaps.init({loadMaps: true}))
+            .pipe(plugins.concat(config.names.scripts))
+            .pipe(plugins.if(config.params.minify, plugins.uglify()))
+            .pipe(plugins.sourcemaps.write('./'))
+            .pipe(gulp.dest(config.path.results + config.fileType.js));
+    }
+
+    compileSass() {
+        return gulp.src([config.path.sources + config.fileType.sass + '*'])
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.sass())
+            .pipe(plugins.concat(config.names.styles))
+            .pipe(plugins.autoprefixer())
+            .pipe(plugins.if(config.params.minify, plugins.cleanCss()))
+            .pipe(plugins.sourcemaps.write('./'))
+            .pipe(gulp.dest(config.path.results + config.fileType.css));
+    }
+
+    compileImg() {
+        return gulp.src([config.path.sources + config.fileType.img])
+            .pipe(gulp.dest(config.path.results + config.fileType.img));
+    }
+
+    compileTwig(options) {
+        options = options || {};
+
+        function isFileAccessible(file) {
+            try {
+                fs.accessSync(file, fs.F_OK);
+                return true;
+            } catch(e) {
+                return false;
+            }
+        }
+        function runTwig(content, source) {
+            return gulp.src(source)
+                .pipe(plugins.twig({data: JSON.parse(content)}))
+                .pipe(plugins.inject(gulp.src([config.path.results + config.fileType.js + config.names.scripts], {read : false}), {
+                    ignorePath: [config.path.results],
+                    addRootSlash: false,
+                    // addPrefix: '..'
+                }))
+                .pipe(plugins.inject(gulp.src([config.path.results + config.fileType.css + config.names.styles], {read : false}), {
+                    ignorePath: [config.path.results],
+                    addRootSlash: false,
+                    // addPrefix: '..'
+                }))
+                .pipe(gulp.dest(config.path.results));
+        }
+
+        let source = options.path ? options.path : config.path.sources + config.fileType.twig + 'pages/*.twig';
+
+        fs.readFile(config.path.sources + config.fileType.twig + config.names.twigGlobals, (err, content) => {
+
+            if (!options.sync) return runTwig(content, source);
+            else {
+                let i = setInterval(() => {
+                    if (
+                        isFileAccessible(config.path.results + config.fileType.js + config.names.scripts) &&
+                        isFileAccessible(config.path.results + config.fileType.css + config.names.styles)
+                    ) {
+                        clearInterval(i);
+                        return runTwig(content, source);
+                    }
+                }, 500);
+            }
+        });
+    }
+
+    watch() {
+        gulp.watch(config.path.sources + config.fileType.js + '**/*', () => {
+            this.compileJs();
+        });
+        gulp.watch(config.path.sources + config.fileType.sass + '**/*', () => {
+            this.compileSass();
+        });
+        gulp.watch(config.path.sources + config.fileType.img + '**/*', () => {
+            this.compileImg();
+        });
+        gulp.watch([
+            config.path.sources + config.fileType.twig + '*/**',
+            config.path.sources + config.fileType.twig + config.names.twigGlobals
+        ], () => {
+            this.compileTwig();
+        });
+        gulp.watch(config.path.sources + config.fileType.twig + '/pages/*.twig', e => {
+            this.compileTwig({path: e.path});
+        });
+    }
+
+    defaultTask() {
+        function taskData(group, name, description) {
+            console.log(clc.bgMagenta(group + clc.whiteBright(':' + name)) + clc.blackBright(' - ' + description));
+        }
+        function paramData(param, description) {
+            console.log(clc.bgMagenta('-' + param) + clc.blackBright(' - ' + description));
+        }
+
+        console.log(clc.cyan('\nPlease specify task:\n'));
+        taskData('compile', 'js', 'concat all javascript files and transpile es6 to es5');
+        taskData('compile', 'sass', 'concat all scss files and compile to css');
+        taskData('compile', 'twig', 'compile all twig files to html');
+        taskData('compile', 'static', 'run all compile tasks');
+        console.log('');
+        taskData('build', 'watch', 'run watcher on static files');
+        taskData('build', 'dev', 'compile all static files and run watcher');
+        taskData('build', 'production', 'clean final build');
+        console.log(clc.cyan('\nAvailable params:\n'));
+        paramData('minify', 'compress static files');
+    }
+}
+
+const tasks = new Tasks();
+
+gulp.task('compile:js', () => {
+    tasks.compileJs();
+});
+gulp.task('compile:sass', () => {
+    tasks.compileSass();
+});
+gulp.task('compile:twig', () => {
+    tasks.compileTwig();
+});
+gulp.task('compile:img', () => {
+    tasks.compileImg();
+});
+gulp.task('compile:static', () => {
+    tasks.compileJs();
+    tasks.compileSass();
+    tasks.compileImg();
+    tasks.compileTwig({sync: true});
 });
 
-gulp.task('twig', function() {
-    return gulp.src(twigFiles[0].watch)
-        .pipe(gulpIgnore.include(/\.html/))
-        .pipe(gulpIgnore.include('_common'))
-        .pipe(twig({}))
-        .pipe(rename(function(path) {
-            path.extname = ''; // strip the .twig extension
-        }))
-        .pipe(gulp.dest(twigFiles[0].output));
+gulp.task('build:watch', () => {
+    tasks.watch();
+});
+gulp.task('build:dev', ['compile:static'], () => {
+    tasks.watch();
+});
+gulp.task('build:production', ['compile:static'], () => {
+
 });
 
-gulp.task('sass', function() {
-    return gulp.src(sassFiles[0].watch)
-        .pipe(plumber())
-        .pipe(sass({outputStyle: 'compressed'}))
-        .pipe(autoprefixer({
-            browsers: ['last 3 versions'],
-            cascade: false
-        }))
-        .pipe(gulp.dest(sassFiles[0].output));
+gulp.task('default', function() {
+    tasks.defaultTask();
 });
-
-gulp.task('js', function() {
-    return gulp.src(jsFiles[0].watch)
-        .pipe(plumber())
-        .pipe(uglify({
-            outSourceMap: true
-        }))
-        .pipe(rename(function (path) {
-            path.basename += '.min'
-        }))
-        .pipe(gulp.dest(jsFiles[0].output));
-});
-
-gulp.task('vendor', function() {
-    return gulp.src('src/js/vendor/**/*')
-        .pipe(gulp.dest(jsFiles[0].output + '/vendor'));
-});
-
-gulp.task('img', function() {
-    return gulp.src('src/img/**/*')
-        .pipe(gulp.dest('./web/img'));
-});
-
-gulp.task('default', ['watch']);
-gulp.task('build', ['twig', 'sass', 'js', 'vendor', 'img']);
