@@ -1,12 +1,12 @@
 {
-  "name": "front-end-boilerplate",
+  "name": "react-template",
   "version": "0.0.1",
-  "description": "K2 front end team startup project",
+  "description": "",
   "repository": {
     "type": "git",
     "url": "git@gitlab.k2.pl:k2/front-end-boilerplate.git"
   },
-  "author": "Piotr Konowrocki",
+  "author": "Anna Lasocka",
   "license": "UNLICENSED",
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -50,7 +50,7 @@
     "twig-loader": "^0.3.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-analyzer": ">=3.3.2",
     "webpack-clean-obsolete-chunks": "^0.1.10",
     "webpack-strip": "^0.1.0",
     "webpack-strip-block": "^0.1.1"

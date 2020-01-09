@@ -1,9 +1,9 @@
 {
   "paths": {
     "root": "../",
-    "sources": "sources/",
+    "sources": "",
     "temp": "_temp/",
-    "results": "public/"
+    "results": "examples/"
   },
   "dirs": {
     "css": "css/",
@@ -11,7 +11,7 @@
     "js": "js/",
     "img": "img/",
     "html": "",
-    "twig": "templates/",
+    "twig": "",
     "exclude": "vendors/",
     "nodeModules": "node_modules/"
   },
