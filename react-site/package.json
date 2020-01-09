@@ -50,7 +50,7 @@
     "twig-loader": "^0.3.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-clean-obsolete-chunks": "^0.1.10",
     "webpack-strip": "^0.1.0",
     "webpack-strip-block": "^0.1.1"
