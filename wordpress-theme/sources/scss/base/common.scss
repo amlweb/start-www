@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+    zoom: 1;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+    zoom: 1;
+}
+
+.text--left   { text-align: left; }
+.text--center { text-align: center; }
+.text--right  { text-align: right; }
+
+.border--top    { border-top: 1px solid $gray-light; }
+.border--left   { border-left: 1px solid $gray-light; }
+.border--bottom { border-bottom: 1px solid $gray-light; }
+.border--right  { border-right: 1px solid $gray-light; }

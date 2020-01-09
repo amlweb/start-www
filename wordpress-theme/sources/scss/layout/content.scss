@@ -1,0 +1,17 @@
+body {
+  font-family: $font-default;
+  color: $black;
+  background-color: $gray-light;
+  font-size: 14px;
+  line-height: 1.5em;
+  font-weight: 300;
+}
+
+
+.container {
+    max-width: 1060px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20px;
+}

@@ -1,0 +1,45 @@
+{
+  "paths": {
+    "root": "../",
+    "sources": "sources/",
+    "temp": "_temp/",
+    "results": "public/"
+  },
+  "dirs": {
+    "css": "css/",
+    "sass": "sass/",
+    "js": "js/",
+    "img": "img/",
+    "html": "",
+    "twig": "templates/",
+    "exclude": "vendors/",
+    "nodeModules": "node_modules/"
+  },
+  "files": {
+    "scriptsSource": "main.js",
+    "scriptsResults": "scripts.js",
+    "stylesSource": "main.scss",
+    "stylesResults": "styles.css",
+    "twigGlobals": "_globals.json"
+  },
+  "settings": {
+    "twig": true,
+    "constFilenames": false,
+    "livereload": {
+      "enabled" : false,
+      "livereload": true,
+      "directoryListing": true,
+      "open": false,
+      "host": "127.0.0.1",
+      "port": 1337
+    }
+  },
+  "webpack": {
+    "name": "main",
+    "chunksName": "[name].[chunkhash].chunk.js",
+    "scssVariables": "utils/_variables.scss",
+    "publicPath": "/js/",
+    "showPolyfills": false,
+    "showAssets": false
+  }
+}

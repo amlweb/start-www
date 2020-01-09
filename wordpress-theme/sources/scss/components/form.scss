@@ -1,0 +1,12 @@
+input[type="text"], 
+input[type="email"], 
+input[type="number"], 
+input[type="tel"], 
+select, 
+textarea {
+    width: 100%;
+    border: 1px solid $gray-light;
+    padding: 0.5em;
+    margin-top: 12px;
+    border-radius: 2px;
+}

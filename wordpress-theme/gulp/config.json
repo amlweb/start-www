@@ -1,0 +1,26 @@
+{
+  "paths": {
+    "root": "../",
+    "sources": "sources/",
+    "temp": "_temp/",
+    "results": "/"
+  },
+  "dirs": {
+    "css": "css/",
+    "sass": "scss/",
+    "js": "js/",
+    "img": "img/",
+    "exclude": "vendors/"
+  },
+
+  "files": {
+    "scriptsSource": "main.js",
+    "scriptsResults": "scripts.js",
+    "stylesSource": "main.scss",
+    "stylesResults": "styles.css"
+  },
+  "settings": {
+    "twig": false,
+    "constFilenames": false
+  }
+}

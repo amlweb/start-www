@@ -1,0 +1,21 @@
+// Colors
+$black:     #1a1a1a;
+$gray-dark: #232323;
+$gray:		#b0b0b0;
+$gray-light:#ecefde;
+$white:     #fff;
+
+$breakpoints: (
+        'phone-s': 320px,
+        'phone-l': 480px,
+        'phone-xl': 560px,
+        'tablet-s': 768px,
+        'tablet-l': 992px,
+        'tablet-xl': 1024px,
+        'desktop-s': 1100px,
+        'desktop-m': 1300px,
+        'desktop-l': 1400px,
+        'desktop-xl': 1600px
+);
+
+$font-default: Arial, sans-serif;
