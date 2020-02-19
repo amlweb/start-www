@@ -17,8 +17,8 @@ EXPOSE 3000
 
 CMD [ "npm", "start" ]
 
-
-#$ docker run \
+# docker build -t CONTAINER_NAME
+# docker run \
 #  -e "NODE_ENV=production" \
 #  -u "node" \
 #  -m "300M" --memory-swap "1G" \
@@ -26,3 +26,4 @@ CMD [ "npm", "start" ]
 #  -p 3001:3000
 #  --name "my-nodejs-app" \
 #  node [script]
+#  CONTAINER_NAME/CONTAINER_HASH

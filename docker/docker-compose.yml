@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    # path where the custom Dockerfile is
+    build: .
+
+    # ports in witch we communicate with aplication in docker image
+    ports:
+    - "3000:3000"
+    # volumes:
+    # - .:/code
+    # - logvolume01:/var/log
+
+    # set up communications between services
+    links:
+    - redis
+  redis:
+    # docker image on docker.hub
+    image: redis
+# volumes:
+#   logvolume01: {}
